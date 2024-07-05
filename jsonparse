@@ -1,0 +1,9 @@
+[
+  .releases[] |
+    select((."expiration-date"//empty | fromdateiso8601) > now
+       and (."expiration-date"//empty | fromdateiso8601) < ($til | tonumber))
+] | unique_by(.channel, .architecture) |
+  # To get output
+  .[] | [$snapname,."expiration-date",.channel,.architecture] | @tsv
+# Just sets exit code if no match is found
+| select (length>0)

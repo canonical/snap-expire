@@ -3,23 +3,24 @@ usage(){
 2>&1 cat <<EOF
 USAGE
 
-  $0 [-a auth-id] [-e store-email] [-n ndays] snap-name
+  MM_URL=url $0 watch-file
 
 DESCRIPTION
 
-  Outputs the branches that expire in number-of-days in JSON format.
+  Writes the branches that will expire in number-of-days to the
+  channel specified by the URL incoming hook.
 
-  Defaults:
-    auth-id: a
-    ndays:   5
+  Each line of the watch-file must be in the format
 
-  If this is your first time running the command, you must provide store-email
-  so that Surl can generate your authorization identifier in
-  "\$HOME/snap/surl/common/{auth-id}.surl".
+    snap ndays authfile ids-to-ping
+
+  To generate authfile use surl -a authfile -e emailof@snap.store snapname.
 
 ENVIRONMENT
 
-  APILOG: If set, the API response will be logged to that file.
+  MM_URL: Mandatory, the incoming hook to the Mattermost channel.
+
+  APILOG: If set, all API responses will be appended to that file.
 
 EXIT VALUES
 
@@ -41,7 +42,7 @@ require(){
 #a Mattermost hook.
 broadcast(){
     s=$(sed 's/"//g')
-    s=$(printf '{"text":"Expiring in <=%s days:\n```\n%s\n```"}' "$ndays" "$s")
+    s=$(printf '{"text":"Expiring in <=%s days:\n```\n%s\n```\n%s"}' "$ndays" "$s" "$pingList")
     curl -s -X POST -H 'Content-Type:application/json' -d "$s" "$MM_URL"
 }
 
@@ -49,42 +50,21 @@ require surl
 require jq
 require curl
 
-ndays=5
-auth=-aa
-while getopts e:a:n: option; do
-    case "$option" in
-    a) auth=-a$OPTARG;;
-    n) ndays=$OPTARG;;
-    e) email=-e$OPTARG;;
-    ?) usage;;
-    esac
-done
-
-shift "$((OPTIND-1))"
-if [ $# != 1 ]; then
+if [ $# != 1 ] || [ -z "$MM_URL" ] ; then
     usage
 fi
 
-snapname=$1
-apiurl="https://dashboard.snapcraft.io/api/v2/snaps/$snapname/releases"
-unparsed=apiResp
-toExpire=out
-if [ -n "$INPUT" ]; then
-    unparsed=$INPUT
-else
-    surl ${auth:+"$auth"} -s production ${email+"$email"} "$apiurl" > "$unparsed"
-fi
-if <"$unparsed" >"$toExpire" jq -e \
-  --arg til "$(date --date="today + $ndays days" +%s)" \
-  --arg snapname "$snapname" '
-[
-  .releases[] |
-    select((."expiration-date"//empty | fromdateiso8601) > now
-       and (."expiration-date"//empty | fromdateiso8601) < ($til | tonumber))
-] | unique_by(.channel, .architecture) |
-  # To get output
-  .[] | [$snapname,."expiration-date",.channel,.architecture] | @tsv
-# Just sets exit code if no match is found
-| select (length>0)' && [ -n "$MM_URL" ]; then
-    <"$toExpire" broadcast
-fi
+unparsed=$(mktemp)
+toExpire=$(mktemp)
+while read -r snapname ndays auth ping; do
+    [ "${snapname#?}" = "#" ] && continue
+    apiurl="https://dashboard.snapcraft.io/api/v2/snaps/$snapname/releases"
+    surl -a "$auth" -s production "$apiurl" > "$unparsed"
+    [ -n "$APILOG" ] && cat "$unparsed" >> "$APILOG"
+    if <"$unparsed" >>"$toExpire" jq -e \
+      --arg til "$(date --date="today + $ndays days" +%s)" \
+      --arg snapname "$snapname" -f jsonparse; then
+        pingList="$pingList $ping"
+    fi
+done <"$1"
+<"$toExpire" broadcast

@@ -2,16 +2,18 @@ This repository's CI will daily broadcast snaps branches soon to expire in
 Mattermost's ~branch-expirations channel.
 
 As the Snap Store considers that information is private data, to enroll
-your snap here, you first need to gather authorization data.
+your snaps here, you first need to gather authorization data.
 
-The recipe to enroll your snap is:
+The recipe to enroll your snaps is:
 
 * Locally, "snap install surl".
-* Locally, snap-expire -e {emailregistered@forthe.snapstore} -a {snap} {snap}
+* Locally, surl -e {emailregistered@forthe.snapstore} -a {snap} {snap}
   You will be asked your password and 2FA.
   This causes your authentication identifier file (used in next step) to be
   created.
 * Copy the contents of ~/snap/surl/common/snap.surl to a new repository secret
   in https://github.com/canonical/snap-expire/settings/secrets/actions.
-* Add your run of snap-expire to .github/workflows/ci.yaml.
-* Open a merge request.
+  This is an one-time operation, if you have more than one snap under your belt 
+  you'll use the same identifier file.
+* Add your printf line and env line to .github/workflows/ci.yaml.
+* Append your entry to watched-snaps.

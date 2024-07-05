@@ -1,0 +1,3 @@
+#snap-name expire-in auth-file-without-extension [mattermost-ids-to-ping]
+chromium 22 a @nteodosio,@fictionalperson
+llvm-chromium 44 a @nteodosio,@fictionalperson2
