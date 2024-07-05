@@ -72,7 +72,7 @@ toExpire=out
 if [ -n "$INPUT" ]; then
     unparsed=$INPUT
 else
-    surl ${auth:+"$auth"} -s production ${email+"$email"}"$apiurl" > "$unparsed"
+    surl ${auth:+"$auth"} -s production ${email+"$email"} "$apiurl" > "$unparsed"
 fi
 if <"$unparsed" >"$toExpire" jq -e \
   --arg til "$(date --date="today + $ndays days" +%s)" \
