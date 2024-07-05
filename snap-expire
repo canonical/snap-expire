@@ -47,6 +47,7 @@ broadcast(){
 
 require surl
 require jq
+require curl
 
 ndays=5
 auth=-aa
