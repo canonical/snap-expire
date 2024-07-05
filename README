@@ -1,0 +1,6 @@
+To start observing a snap expiration:
+
+* Run sh snap-expire -e {youremail@canonical.com} -a {snap} {snap}
+* Copy the contents of ~/snap/surl/common/snap.surl to a new repository secret in
+  https://github.com/canonical/snap-expire/settings/secrets/actions.
+* Add your run of snap-expire to .github/workflows/ci.yaml.
