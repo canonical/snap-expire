@@ -1,29 +1,66 @@
 #!/bin/sh
-email=$1
-snapname=$2
-ndays=${3:-5}
-
-if [ "$#" -lt 2 ]; then
-cat <<EOF
+usage(){
+2>&1 cat <<EOF
 USAGE
 
-  $0 store-email snap-name [number-of-days]
+  $0 [-a auth-id] [-e store-email] [-n ndays] snap-name
 
 DESCRIPTION
 
-  Outputs the branches that expire in number-of-days (default: 5) in JSON format.
+  Outputs the branches that expire in number-of-days in JSON format.
+
+  Defaults:
+    auth-id: a
+    ndays:   5
+
+  If this is your first time running the command, you must provide store-email
+  so that Surl can generate your authorization identifier in
+  "\$HOME/snap/surl/common/{auth-id}.surl".
+
+ENVIRONMENT
+
+  APILOG: If set, the API response will be logged to that file.
 
 EXIT VALUES
 
-  4 if no branch is to expire in number-of-days;
-  0 if one branch is to expire in number-of-days;
-  ? if unexpected error occurs.
+   4 if no branch is to expire in number-of-days;
+   0 if one branch is to expire in number-of-days;
+  20 if dependency is missing;
+  21 if this error message is displayed;
+   ? if unexpected error occurs.
 EOF
-exit 21
-fi
+    exit 21
+}
+require(){
+    if ! command -v "$1" >/dev/null; then
+        2>&1 echo "$1 missing"
+        exit 20
+    fi
+}
 
-surl -a x -s production -e "$email" \
-  "https://dashboard.snapcraft.io/api/v2/snaps/$snapname/releases" |
+require surl
+require jq
+
+ndays=5
+auth=-aa
+while getopts e:a:n: option; do
+    case "$option" in
+    a) auth=-a$OPTARG;;
+    n) ndays=$OPTARG;;
+    e) email=-e$OPTARG;;
+    ?) usage;;
+    esac
+done
+
+shift "$((OPTIND-1))"
+if [ $# != 1 ]; then
+    usage
+fi
+snapname=$1
+apiurl="https://dashboard.snapcraft.io/api/v2/snaps/$snapname/releases"
+
+surl ${auth:+"$auth"} -s production ${email+"$email"}"$apiurl" |
+tee ${APILOG:-/dev/null} |
 jq -e --arg til "$(date --date="today + $ndays days" +%s)" '
 [
   .releases[] |
