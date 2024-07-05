@@ -26,4 +26,4 @@ jobs:
           snap=chromium
           2>/dev/null surl #Creates ~/snap/surl necessary for next step
           printf %s "$CHROMIUM" > "$HOME/snap/surl/common/$snap.surl"
-          MM_URL=$MM_URL ./snap-expire -n 10 -a "$snap" "$snap"
+          ./snap-expire -n 5 -a "$snap" "$snap"
