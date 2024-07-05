@@ -42,7 +42,7 @@ require(){
 #a Mattermost hook.
 broadcast(){
     s=$(sed 's/"//g')
-    s=$(printf '{"text":"Expiring in <=%s days:\n```\n%s\n```\n%s"}' "$ndays" "$s" "$pingList")
+    s=$(printf '{"text":"```\n%s\n```\n%s"}' "$s" "$pingList")
     curl -s -X POST -H 'Content-Type:application/json' -d "$s" "$MM_URL"
 }
 
