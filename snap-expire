@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 usage(){
 2>&1 cat <<EOF
 USAGE
