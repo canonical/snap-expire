@@ -37,6 +37,13 @@ require(){
         exit 20
     fi
 }
+#Take stdin, remove double quotes and dispatch it in the correct format to
+#a Mattermost hook.
+broadcast(){
+    s=$(sed 's/"//g')
+    s=$(printf '{"text":"Expiring in <=%s days:\n```\n%s\n```"}' "$ndays" "$s")
+    curl -s -X POST -H 'Content-Type:application/json' -d "$s" "$MM_URL"
+}
 
 require surl
 require jq
@@ -56,16 +63,27 @@ shift "$((OPTIND-1))"
 if [ $# != 1 ]; then
     usage
 fi
+
 snapname=$1
 apiurl="https://dashboard.snapcraft.io/api/v2/snaps/$snapname/releases"
-
-surl ${auth:+"$auth"} -s production ${email+"$email"}"$apiurl" |
-tee ${APILOG:-/dev/null} |
-jq -e --arg til "$(date --date="today + $ndays days" +%s)" '
+unparsed=apiResp
+toExpire=out
+if [ -n "$INPUT" ]; then
+    unparsed=$INPUT
+else
+    surl ${auth:+"$auth"} -s production ${email+"$email"}"$apiurl" > "$unparsed"
+fi
+if <"$unparsed" >"$toExpire" jq -e \
+  --arg til "$(date --date="today + $ndays days" +%s)" \
+  --arg snapname "$snapname" '
 [
   .releases[] |
     select((."expiration-date"//empty | fromdateiso8601) > now
        and (."expiration-date"//empty | fromdateiso8601) < ($til | tonumber))
-] | unique_by(.channel, .architecture)
+] | unique_by(.channel, .architecture) |
+  # To get output
+  .[] | [$snapname,."expiration-date",.channel,.architecture] | @tsv
 # Just sets exit code if no match is found
-| select (length>0)'
+| select (length>0)' && [ -n "$MM_URL" ]; then
+    <"$toExpire" broadcast
+fi
