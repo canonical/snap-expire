@@ -3,9 +3,6 @@ name: CI
 on:
   schedule:
     - cron: '0 8 * * 1-5'
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - master
