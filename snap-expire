@@ -33,10 +33,12 @@ EOF
     exit 21
 }
 require(){
-    if ! command -v "$1" >/dev/null; then
-        2>&1 echo "$1 missing"
-        exit 20
-    fi
+    for cmd in "$@"; do
+        if ! command -v "$cmd" >/dev/null; then
+            2>&1 echo "$cmd missing"
+            exit 20
+        fi
+    done
 }
 #Take stdin, remove double quotes and dispatch it in the correct format to
 #a Mattermost hook.
@@ -47,9 +49,7 @@ broadcast(){
     curl -s -X POST -H 'Content-Type:application/json' -d "$s" "$MM_URL"
 }
 
-require surl
-require jq
-require curl
+require surl jq curl
 
 if [ $# != 1 ] || [ -z "$MM_URL" ] ; then
     usage
