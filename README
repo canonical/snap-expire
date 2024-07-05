@@ -1,6 +1,17 @@
-To start observing a snap expiration:
+This repository's CI will daily broadcast snaps branches soon to expire in
+Mattermost's ~branch-expirations channel.
 
-* Run sh snap-expire -e {youremail@canonical.com} -a {snap} {snap}
-* Copy the contents of ~/snap/surl/common/snap.surl to a new repository secret in
-  https://github.com/canonical/snap-expire/settings/secrets/actions.
+As the Snap Store considers that information is private data, to enroll
+your snap here, you first need to gather authorization data.
+
+The recipe to enroll your snap is:
+
+* Locally, "snap install surl".
+* Locally, snap-expire -e {emailregistered@forthe.snapstore} -a {snap} {snap}
+  You will be asked your password and 2FA.
+  This causes your authentication identifier file (used in next step) to be
+  created.
+* Copy the contents of ~/snap/surl/common/snap.surl to a new repository secret
+  in https://github.com/canonical/snap-expire/settings/secrets/actions.
 * Add your run of snap-expire to .github/workflows/ci.yaml.
+* Open a merge request.
