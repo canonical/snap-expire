@@ -17,9 +17,9 @@ jobs:
         env:
           CHROMIUM: ${{ secrets.CHROMIUM }}
         run: |
-          set -x
+          set -x +e
           sudo snap install surl
-          sudo apt install -y jq tree
+          sudo apt install -y jq
           snap=chromium
           2>/dev/null surl #Creates ~/snap/surl necessary for next step
           printf %s "$CHROMIUM" > "$HOME/snap/surl/common/$snap.surl"
