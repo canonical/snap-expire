@@ -8,13 +8,13 @@ The recipe to enroll your snaps is:
 
 * Locally, "snap install surl".
 * Locally,
-  $ surl -e {emailregistered@forthe.snapstore} -p package_access -s production --snap {snap} -a {snap}
+  $ surl -e {your@snapstore.email} -p package_access -s production --snap {snap} -a {auth-file}
   You will be asked your password and 2FA.
   This causes your authentication identifier file (used in next step) to be
   created.
-* Copy the contents of ~/snap/surl/common/snap.surl to a new repository secret
-  in https://github.com/canonical/snap-expire/settings/secrets/actions.
-  This is an one-time operation, if you have more than one snap under your belt 
-  you'll use the same identifier file.
+  You can provide multiple --snap arguments if you prefer to generate an
+  unified authentication identifier file.
+* Copy the contents of ~/snap/surl/common/{auth-file}.surl to a new repository
+  secret in https://github.com/canonical/snap-expire/settings/secrets/actions.
 * Add your printf line and env line to .github/workflows/ci.yaml.
 * Append your entry to watched-snaps.
