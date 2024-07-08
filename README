@@ -7,7 +7,8 @@ your snaps here, you first need to gather authorization data.
 The recipe to enroll your snaps is:
 
 * Locally, "snap install surl".
-* Locally, surl -e {emailregistered@forthe.snapstore} -a {snap} {snap}
+* Locally,
+  $ surl -e {emailregistered@forthe.snapstore} -p package_access -s production --snap {snap} -a {snap}
   You will be asked your password and 2FA.
   This causes your authentication identifier file (used in next step) to be
   created.
