@@ -1,5 +1,5 @@
 [
-  .releases[] |
+  ."channel-map"[] |
     select((."expiration-date"//empty | fromdateiso8601) > now
        and (."expiration-date"//empty | fromdateiso8601) < ($til | tonumber))
 ] | unique_by(.channel, .architecture) |

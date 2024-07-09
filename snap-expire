@@ -61,7 +61,7 @@ unparsed=$(mktemp)
 toExpire=$(mktemp)
 while read -r snapname ndays auth ping; do
     case "$snapname" in "#"*) continue;; esac
-    apiurl="https://dashboard.snapcraft.io/api/v2/snaps/$snapname/releases"
+    apiurl="https://dashboard.snapcraft.io/api/v2/snaps/$snapname/channel-map"
     surl -a "$auth" -s production "$apiurl" > "$unparsed"
     [ -n "$APILOG" ] && cat "$unparsed" >> "$APILOG"
     if <"$unparsed" >>"$toExpire" jq -e \
