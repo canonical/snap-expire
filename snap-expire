@@ -3,7 +3,7 @@ usage(){
 2>&1 cat <<EOF
 USAGE
 
-  MM_URL=url $0 watch-file
+  MM_URL=url|APILOG=file $0 watch-file
 
 DESCRIPTION
 
@@ -18,9 +18,11 @@ DESCRIPTION
 
 ENVIRONMENT
 
-  MM_URL: Mandatory, the incoming hook to the Mattermost channel.
+  At least one must exist:
 
-  APILOG: If set, all API responses will be appended to that file.
+    MM_URL: The incoming hook to the Mattermost channel.
+
+    APILOG: API responses are be appended to that file.
 
 EXIT VALUES
 
@@ -51,7 +53,7 @@ broadcast(){
 
 require surl jq curl
 
-if [ $# != 1 ] || [ -z "$MM_URL" ] ; then
+if [ $# != 1 ] || [ -z "$MM_URL$APILOG" ] ; then
     usage
 fi
 
