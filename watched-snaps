@@ -1,3 +1,5 @@
 #snap-name expire-in auth-file-without-extension [mattermost-ids-to-ping]
 chromium 3 chromium @nteodosio,@fictionalperson
 llvm-chromium 3 llvm-chromium @nteodosio,@fictionalperson2
+# expire needs to be lower once confirmed to be working
+snap-store 25 snap-store @seb128

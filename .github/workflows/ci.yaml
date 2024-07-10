@@ -14,6 +14,7 @@ jobs:
         env:
           CHROMIUM: ${{ secrets.NTEODOSIO_CHROMIUM }}
           LLVM_CHROMIUM: ${{ secrets.NTEODOSIO_LLVM_CHROMIUM }}
+          SNAP_STORE: ${{ secrets.SEB_SNAP_STORE }}
           MM_URL: ${{ secrets.MM_URL }}
         run: |
           set -x +e
@@ -23,4 +24,5 @@ jobs:
 
           printf %s "$CHROMIUM" > "$HOME/snap/surl/common/chromium.surl"
           printf %s "$LLVM_CHROMIUM" > "$HOME/snap/surl/common/llvm-chromium.surl"
+          printf %s "$SNAP_STORE" > "$HOME/snap/surl/common/snap-store.surl"
           ./snap-expire watched-snaps
