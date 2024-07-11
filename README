@@ -24,3 +24,5 @@ The recipe to enroll your snaps is:
   {expire-in}: Your snap (and optionally mattermost-ids for pinging) will be
                included in the Mattermost's reminder message if a branch of it
                will expire in {expire-in} days.
+  {mattermost-ids}: List of Mattermost IDs to ping (separated by whatever
+                    punctuation, but not spaces, e.g. person1:person2,person3).
