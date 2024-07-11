@@ -3,12 +3,13 @@ usage(){
 2>&1 cat <<EOF
 USAGE
 
-  MM_URL=url|APILOG=file $0 watch-file
+  [MM_URL=url] [APILOG=file] $0 watch-file
 
 DESCRIPTION
 
   Writes the branches that will expire in number-of-days to the
-  channel specified by the URL incoming hook.
+  channel specified by the URL incoming hook. It also writes it
+  to a temporary file (whose path is printed to stdout).
 
   Each line of the watch-file must be in the format
 
@@ -17,8 +18,6 @@ DESCRIPTION
   To generate authfile use surl -a authfile -e emailof@snap.store snapname.
 
 ENVIRONMENT
-
-  At least one must exist:
 
     MM_URL: The incoming hook to the Mattermost channel.
 
@@ -53,7 +52,7 @@ broadcast(){
 
 require surl jq curl
 
-if [ $# != 1 ] || [ -z "$MM_URL$APILOG" ] ; then
+if [ $# != 1 ]; then
     usage
 fi
 
