@@ -70,4 +70,6 @@ while read -r snapname ndays auth ping; do
         pingList="$pingList $ping"
     fi
 done <"$1"
+
+echo "The snaps that would be broadcasted to expire are in $toExpire."
 <"$toExpire" broadcast
