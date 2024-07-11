@@ -68,8 +68,11 @@ while read -r snapname ndays auth ping; do
       --arg til "$(date --date="today + $ndays days" +%s)" \
       --arg snapname "$snapname" -f jsonparse; then
         pingList="$pingList $ping"
+        hasResult=1
     fi
 done <"$1"
 
 echo "The snaps that would be broadcasted to expire are in $toExpire."
-<"$toExpire" broadcast
+if test -n "$hasResult"; then
+    <"$toExpire" broadcast
+fi
