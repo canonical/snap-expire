@@ -73,6 +73,6 @@ while read -r snapname ndays auth ping; do
 done <"$1"
 
 echo "The snaps that would be broadcasted to expire are in $toExpire."
-if test -n "$hasResult"; then
+if test -n "$hasResult" && test -n "$MM_URL"; then
     <"$toExpire" broadcast
 fi
