@@ -1,15 +1,14 @@
 #!/bin/sh -x
 usage(){
 2>&1 cat <<EOF
-USAGE
+TYPICAL USAGE
 
-  [MM_URL=url] [APILOG=file] $0 watch-file
+  MM_URL=url $0 watch-file
 
 DESCRIPTION
 
   Writes the branches that will expire in number-of-days to the
-  channel specified by the URL incoming hook. It also writes it
-  to a temporary file (whose path is printed to stdout).
+  channel specified by the URL incoming hook.
 
   Each line of the watch-file must be in the format
 
@@ -22,6 +21,9 @@ ENVIRONMENT
     MM_URL: The incoming hook to the Mattermost channel.
 
     APILOG: API responses are be appended to that file.
+
+    DRYRUN: If equal to true, prints the results that would be sent to
+            Mattermost to stdout, nullifying effect of MM_URL.
 
 EXIT VALUES
 
@@ -72,6 +74,10 @@ while read -r snapname ndays auth ping; do
 done <"$1"
 
 echo "The snaps that would be broadcasted to expire are in $toExpire."
-if test -n "$hasResult" && test -n "$MM_URL"; then
-    <"$toExpire" broadcast
+if test -n "$hasResult"; then
+    if test "$DRYRUN" = true; then
+        cat "$toExpire"
+    elif test -n "$MM_URL"; then
+        <"$toExpire" broadcast
+    fi
 fi

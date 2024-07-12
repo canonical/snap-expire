@@ -4,6 +4,10 @@ on:
   schedule:
     - cron: '0 8 * * 1-5'
   workflow_dispatch:
+    inputs:
+      dry-run:
+        type: boolean
+        default: true
 
 jobs:
   poll:
@@ -16,6 +20,7 @@ jobs:
           LLVM_CHROMIUM: ${{ secrets.NTEODOSIO_LLVM_CHROMIUM }}
           SNAP_STORE: ${{ secrets.SEB_SNAP_STORE }}
           MM_URL: ${{ secrets.MM_URL }}
+          DRYRUN: ${{ github.event.inputs.dry-run }}
         run: |
           set -x +e
           sudo snap install surl
