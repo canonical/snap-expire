@@ -80,7 +80,7 @@ if test -n "$hasResult"; then
     elif test -n "$MM_URL"; then
         <"$toExpire" broadcast "$MM_URL"
     fi
-    if test -n "$API_DUMP_MM_URL"; then
-        <"$APILOG" broadcast "$API_DUMP_MM_URL"
-    fi
+fi
+if test -n "$API_DUMP_MM_URL"; then
+    <"$APILOG" broadcast "$APILOG"
 fi
