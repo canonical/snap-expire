@@ -49,7 +49,7 @@ broadcast(){
     s=$(sed 's/"//g')
     info="Snap branch expiration warning [bot](https://github.com/canonical/snap-expire)"
     s=$(printf '{"text":"%s\n```\n%s\n```\n%s"}' "$info" "$s" "$pingList")
-    curl -s -X POST -H 'Content-Type:application/json' -d "$s" "$MM_URL"
+    curl -s -X POST -H 'Content-Type:application/json' -d "$s" "$1"
 }
 
 require surl jq curl
@@ -78,6 +78,9 @@ if test -n "$hasResult"; then
     if test "$DRYRUN" = true; then
         cat "$toExpire"
     elif test -n "$MM_URL"; then
-        <"$toExpire" broadcast
+        <"$toExpire" broadcast "$MM_URL"
+    fi
+    if test -n "$API_DUMP_MM_URL"; then
+        <"$APILOG" broadcast "$API_DUMP_MM_URL"
     fi
 fi
