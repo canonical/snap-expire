@@ -20,6 +20,7 @@ jobs:
           LLVM_CHROMIUM: ${{ secrets.NTEODOSIO_LLVM_CHROMIUM }}
           SNAP_STORE: ${{ secrets.SEB_SNAP_STORE }}
           MM_URL: ${{ secrets.MM_URL }}
+          API_DUMP_MM_URL: ${{ secrets.API_DUMP_MM_URL }}
           DRYRUN: ${{ github.event.inputs.dry-run }}
         run: |
           set -x +e
@@ -30,7 +31,7 @@ jobs:
           printf %s "$CHROMIUM" > "$HOME/snap/surl/common/chromium.surl"
           printf %s "$LLVM_CHROMIUM" > "$HOME/snap/surl/common/llvm-chromium.surl"
           printf %s "$SNAP_STORE" > "$HOME/snap/surl/common/snap-store.surl"
-          ./snap-expire watched-snaps
+          APILOG=api-log ./snap-expire watched-snaps
   # Github disables the workflow after 60 days of inactivity in the repository.
   # This job fixes that.
   keepalive:
