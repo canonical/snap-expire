@@ -1,4 +1,4 @@
 #snap-name expire-in auth-file-without-extension [mattermost-ids-to-ping]
 chromium 3 chromium @nteodosio
 llvm-chromium 3 llvm-chromium @nteodosio
-snap-store 7 snap-store @seb128
+snap-store 15 snap-store @seb128
