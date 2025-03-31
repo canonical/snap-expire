@@ -1,4 +1,5 @@
-#!/bin/sh -x
+#!/bin/sh -xe
+trap broadcast_failure 0
 usage(){
 2>&1 cat <<EOF
 TYPICAL USAGE
@@ -50,6 +51,11 @@ broadcast(){
     info="Snap branch expiration warning [bot](https://github.com/canonical/snap-expire)"
     s=$(printf '{"text":"%s\n```\n%s\n```\n%s"}' "$info" "$s" "$pingList")
     curl -s -X POST -H 'Content-Type:application/json' -d "$s" "$1"
+}
+
+broadcast_failure(){
+    pingList="@nteodosio"
+    echo "The bot is in an unreliable state." | broadcast "$MM_URL"
 }
 
 broadcast_debug(){
