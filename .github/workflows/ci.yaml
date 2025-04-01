@@ -28,10 +28,15 @@ jobs:
           sudo apt install -y jq curl
           2>/dev/null surl #Creates ~/snap/surl necessary for next step
 
+          ACTION_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          APILOG=api-log
+          export APILOG
+          export ACTION_URL
+
           printf %s "$CHROMIUM" > "$HOME/snap/surl/common/chromium.surl"
           printf %s "$LLVM_CHROMIUM" > "$HOME/snap/surl/common/llvm-chromium.surl"
           printf %s "$SNAP_STORE" > "$HOME/snap/surl/common/snap-store.surl"
-          APILOG=api-log ./snap-expire watched-snaps
+          ./snap-expire watched-snaps
   # Github disables the workflow after 60 days of inactivity in the repository.
   # This job fixes that.
   keepalive:

@@ -55,7 +55,7 @@ broadcast(){
 
 broadcast_failure(){
     pingList="@nteodosio"
-    echo "The bot is in an unreliable state." | broadcast "$MM_URL"
+    echo "The bot is in an unreliable state. Logs: $ACTION_URL" | broadcast "$MM_URL"
 }
 
 broadcast_debug(){
