@@ -47,6 +47,9 @@ require(){
 #Take stdin, remove double quotes and dispatch it in the correct format to
 #a Mattermost hook.
 broadcast(){
+    if test "$DRYRUN" = true; then
+        return
+    fi
     s=$(sed 's/"//g')
     info="Snap branch expiration warning [bot](https://github.com/canonical/snap-expire)"
     s=$(printf '{"text":"%s\n```\n%s\n```\n%s"}' "$info" "$s" "$pingList")
