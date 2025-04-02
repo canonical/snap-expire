@@ -57,6 +57,9 @@ broadcast(){
 }
 
 broadcast_failure(){
+    #The trap will always be run on exit, so actually check if some error was
+    #returned before proceeding with the failure broadcast.
+    test "$?" = 0 && exit
     pingList="@nteodosio"
     echo "The bot is in an unreliable state. Logs: $ACTION_URL" | broadcast "$MM_URL"
 }
