@@ -37,12 +37,3 @@ jobs:
           printf %s "$LLVM_CHROMIUM" > "$HOME/snap/surl/common/llvm-chromium.surl"
           printf %s "$SNAP_STORE" > "$HOME/snap/surl/common/snap-store.surl"
           ./snap-expire watched-snaps
-  # Github disables the workflow after 60 days of inactivity in the repository.
-  # This job fixes that.
-  keepalive:
-    runs-on: ubuntu-latest
-    permissions:
-      actions: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: gautamkrishnar/keepalive-workflow@v2
