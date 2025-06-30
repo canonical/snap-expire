@@ -25,7 +25,7 @@ jobs:
         run: |
           set -x +e
           sudo snap install surl
-          sudo apt install -y jq curl
+          sudo apt install -y jq curl dateutils
           2>/dev/null surl #Creates ~/snap/surl necessary for next step
 
           ACTION_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

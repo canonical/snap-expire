@@ -70,7 +70,7 @@ broadcast_debug(){
     curl -s -X POST -H 'Content-Type:application/json' -d "$s" "$1"
 }
 
-require surl jq curl
+require surl jq curl datediff
 
 if [ $# != 1 ]; then
     usage
@@ -90,6 +90,16 @@ while read -r snapname ndays auth ping; do
         hasResult=1
     fi
 done <"$1"
+
+# In a public repository, scheduled workflows are automatically disabled
+# by Github when no repository activity has occurred in 60 days.
+lastCommitDaysAgo=$(datediff "$(git log -1 --format=%cs)" "$(date +%F)")
+if [ "$lastCommitDaysAgo" -ge 55 ]; then
+    hasResult=1
+    pingList="$pingList @nteodosio"
+    echo "This bot will soon die because last commit was $lastCommitDaysAgo d" \
+    "ago and Github disables workflows in 60 days of inactivity." >>"$toExpire"
+fi
 
 echo "The snaps that would be broadcasted to expire are in $toExpire."
 if test -n "$hasResult"; then
