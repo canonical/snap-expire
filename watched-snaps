@@ -2,3 +2,4 @@
 chromium 3 chromium @nteodosio
 llvm-chromium 3 llvm-chromium @nteodosio
 snap-store 4 snap-store @seb128
+firefox 4 firefox @nteodosio
