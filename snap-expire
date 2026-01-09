@@ -53,6 +53,8 @@ broadcast(){
     s=$(sed 's/"//g')
     info="Snap branch expiration warning [bot](https://github.com/canonical/snap-expire)"
     s=$(printf '{"text":"%s\n```\n%s\n```\n%s"}' "$info" "$s" "$pingList")
+    # XXX REMOVE ME!
+    test "$(date +%m%d)" -lt 0112 && exit 0
     curl -s -X POST -H 'Content-Type:application/json' -d "$s" "$1"
 }
 
