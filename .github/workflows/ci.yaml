@@ -19,6 +19,7 @@ jobs:
           CHROMIUM: ${{ secrets.NTEODOSIO_CHROMIUM }}
           LLVM_CHROMIUM: ${{ secrets.NTEODOSIO_LLVM_CHROMIUM }}
           FIREFOX: ${{ secrets.NTEODOSIO_FIREFOX }}
+          SNAPD_DESKTOP_INTEGRATION: ${{ secrets.RASTER_SNAPD_DESKTOP_INTEGRATION }}
           SNAP_STORE: ${{ secrets.SEB_SNAP_STORE }}
           MM_URL: ${{ secrets.MM_URL }}
           API_DUMP_MM_URL: ${{ secrets.API_DUMP_MM_URL }}
@@ -38,4 +39,5 @@ jobs:
           printf %s "$LLVM_CHROMIUM" > "$HOME/snap/surl/common/llvm-chromium.surl"
           printf %s "$FIREFOX" > "$HOME/snap/surl/common/firefox.surl"
           printf %s "$SNAP_STORE" > "$HOME/snap/surl/common/snap-store.surl"
+          printf %s "$SNAPD_DESKTOP_INTEGRATION" > "$HOME/snap/surl/common/snapd-desktop-integration.surl"
           ./snap-expire watched-snaps
