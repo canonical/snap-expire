@@ -83,6 +83,11 @@ while read -r snapname ndays auth ping; do
     apiurl="https://dashboard.snapcraft.io/api/v2/snaps/$snapname/channel-map"
     surl -a "$auth" -s production "$apiurl" > "$unparsed"
     [ -n "$APILOG" ] && cat "$unparsed" >> "$APILOG"
+    if <"$unparsed" grep -q macaroon-authorization-required; then
+        >>"$toExpire" echo "$ping: Authorization secret for $snapname expired!"
+        pingList="$pingList $ping"
+        hasResult=1
+    fi
     if <"$unparsed" >>"$toExpire" jq -e \
       --arg til "$(date --date="today + $ndays days" +%s)" \
       --arg snapname "$snapname" -f jsonparse; then
