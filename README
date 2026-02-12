@@ -1,5 +1,5 @@
 This repository's CI will daily broadcast snaps branches soon to expire in
-Mattermost's ~branch-expirations channel.
+Mattermost's ~desktop-team-eng channel.
 
 As the Snap Store considers that information is private data, to enroll
 your snaps here, you first need to gather authorization data.
