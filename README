@@ -14,16 +14,16 @@ The recipe to enroll your snaps is:
          -s production --snap {snap} -a {snap}
 
   You will be asked your password and 2FA.
-  This causes your authentication identifier file {auth-file}.surl, used in next
+  This causes your authentication identifier file {snap}.surl, used in next
   step, to be created.
   You can opt-out of the "refresh without human intervention" part of this
   automation by not giving "-p package_release".
-* Copy the contents of ~/snap/surl/common/{auth-file}.surl to a new repository
+* Copy the contents of ~/snap/surl/common/{snap}.surl to a new repository
   secret in https://github.com/canonical/snap-expire/settings/secrets/actions.
 * Add your env and printf lines to .github/workflows/ci.yaml.
 * Append your entry to watched-snaps, whose format is
 
-  {snap} {expire-in} {auth-file} [{mattermost-ids}]
+  {snap} {expire-in} [{mattermost-ids}]
 
   {expire-in}: Your snap (and optionally mattermost-ids for pinging) will be
                included in the Mattermost's reminder message if a branch of it

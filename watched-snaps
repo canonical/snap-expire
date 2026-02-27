@@ -1,6 +1,6 @@
-#snap-name expire-in auth-file-without-extension [mattermost-ids-to-ping]
-chromium 3 ff-chr-llvm @nteodosio
-llvm-chromium 3 ff-chr-llvm @nteodosio
-snap-store 4 snap-store @seb128
-firefox 4 ff-chr-llvm @nteodosio
-snapd-desktop-integration 4 snapd-desktop-integration @rastersoft-gmail
+#snap-name expire-in [mattermost-ids-to-ping]
+chromium 3 @nteodosio
+llvm-chromium 3 @nteodosio
+snap-store 4 @seb128
+firefox 4 @nteodosio
+snapd-desktop-integration 4 @rastersoft-gmail

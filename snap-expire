@@ -13,9 +13,12 @@ DESCRIPTION
 
   Each line of the watch-file must be in the format
 
-    snap ndays authfile ids-to-ping
+    snap ndays ids-to-ping
 
-  To generate authfile use surl -a authfile -e emailof@snap.store snapname.
+  To generate use
+
+    surl -e {your@snapstore.email} -p package_release -p package_access \
+         -s production --snap {snap} -a {snap}
 
 ENVIRONMENT
 
@@ -87,10 +90,10 @@ fi
 
 unparsed=$(mktemp)
 toExpire=$(mktemp)
-while read -r snapname ndays auth ping; do
+while read -r snapname ndays ping; do
     case "$snapname" in "#"*) continue;; esac
     apiurl="https://dashboard.snapcraft.io/api/v2/snaps/$snapname/channel-map"
-    surl -a "$auth" -s production "$apiurl" > "$unparsed"
+    surl -a "$snapname" -s production "$apiurl" > "$unparsed"
     [ -n "$APILOG" ] && cat "$unparsed" >> "$APILOG"
     if <"$unparsed" grep -q macaroon-authorization-required; then
         >>"$toExpire" echo "$ping: Authorization secret for $snapname expired!"
