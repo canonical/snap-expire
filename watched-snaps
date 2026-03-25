@@ -1,6 +1,6 @@
 #snap-name expire-in [mattermost-ids-to-ping]
 chromium 3 @nteodosio
-llvm-chromium 3 @nteodosio
+llvm-chromium 1 @nteodosio
 snap-store 4 @seb128
 firefox 4 @nteodosio
 snapd-desktop-integration 4 @rastersoft-gmail
