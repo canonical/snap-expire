@@ -54,7 +54,9 @@ broadcast(){
         return
     fi
     s=$(sed 's/"//g')
-    info="Snap branch expiration warning [bot](https://github.com/canonical/snap-expire)"
+    info='Snap branch expiration warning [bot](https://github.com/canonical/snap-expire).
+          The following branches will expire in the next days. Close them or bump them with `snap release <CHANNEL> <REVISION>`.
+          If you do nothing, the bot will itself *attempt* to bump the channels one day before their expiration.'
     s=$(printf '{"text":"%s\n```\n%s\n```\n%s"}' "$info" "$s" "$pingList")
     curl -s -X POST -H 'Content-Type:application/json' -d "$s" "$1"
 }
