@@ -31,4 +31,9 @@ The recipe to enroll your snaps is:
   {mattermost-ids}: List of Mattermost IDs to ping (separated by whatever
                     punctuation, but not spaces, e.g. person1:person2,person3).
 
-* Yes, I do regret writing this as a shell script. Passing around text is no fun.
+-----------
+
+Yes, I do regret writing this as a shell script. Passing around text is no fun.
+
+This bot is mostly a stopgap for https://launchpad.net/bugs/2019554.
+
