@@ -18,7 +18,7 @@ jobs:
         env:
           FF_CHR_LLVM: ${{ secrets.FF_CHR_LLVM }}
           SNAPD_DESKTOP_INTEGRATION: ${{ secrets.RASTER_SNAPD_DESKTOP_INTEGRATION }}
-          SNAP_STORE: ${{ secrets.SEB_SNAP_STORE }}
+          SNAP_STORE: ${{ secrets.SNAP_STORE_SURL }}
           MM_URL: ${{ secrets.MM_URL }}
           API_DUMP_MM_URL: ${{ secrets.API_DUMP_MM_URL }}
           DRYRUN: ${{ github.event.inputs.dry-run }}
